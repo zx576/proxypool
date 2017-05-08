@@ -1,0 +1,54 @@
+{% extends 'myproxy/base.html' %}
+{% block index %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="self-index-headblock">
+
+                <p class="h1">
+                    Free Proxy
+                </p>
+                <p class="h3">
+                    Made by zx
+                </p>
+                <ol class="breadcrumb" style="background-color: #e7e7e7;margin-left: -12px">
+
+                    <li><a href="{% url 'manage' %}">work</a></li>
+                    <li><a href="{% url 'chart' %}">chart</a></li>
+
+                </ol>
+
+            </div>
+
+            <div class="center-block root-index-block">
+{#              <p style="color:white">免费代理 IP</p>#}
+                  <table class="table table-bordered" style="color:black">
+                      <tr>
+                        <th>Addr</th>
+                        <th>Port</th>
+                        <th>匿名度</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>IP 来源</th>
+                        <th>最后验证时间</th>
+                      </tr>
+                      {% for item in items %}
+                      <tr>
+                        <td>{{item.ip }}</td>
+                        <td>{{item.port }}</td>
+                        <td>{{item.get_type_display}}</td>
+                        <td>{{item.head}}</td>
+                        <td>{{item.district}}</td>
+                        <td>{{item.resourse}}</td>
+                        <td>{{item.last_modified_time}}</td>
+                      </tr>
+                      {% endfor %}
+                  </table>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'myproxy/base.html' %}
+{% block login %}
+<script>
+    $('body').css('background-color','#e7e7e7');
+</script>
+    <div class="center-block self-login-div1">
+        <div class="container-fluid">
+            <form action="" class="form-div" method="post"> {#   selfdefine #}
+                {% csrf_token %}
+{#                <input type="hidden" name="next" value="{{ next }}" id="next">#}
+                <label for="" class="center-block self-login-WB-label">Welcome Back</label>
+
+                <hr>
+
+                <label for="" class="label label-default">用户名</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="username">
+                </div>
+                <label for="" class="label label-default">密码</label>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <div class="form-group" style="padding-top: 10px;">
+                    <button type="submit" class="btn btn-default btn-block self-login-btn"><b>Login</b></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    var a = $('#next').val();
+    console.log(a)
+    </script>
+{% endblock %}

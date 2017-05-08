@@ -1,0 +1,131 @@
+{% extends 'myproxy/base.html' %}
+{% block register %}
+{% load static %}
+    <script>
+        $('body').css('background-color','#e7e7e7')
+    </script>
+    <div class="center-block register-div">  {#   selfdefine #}
+        <div class="container-fluid">
+            <form action="" class="form-div" id="form1" method="post">
+                {% csrf_token %}
+                <label for="" class="center-block" style="font-size:30px;text-align: center">Welcome</label>
+
+                <hr>
+
+                <label for="" class="label label-default">用户名</label>
+                <div class="form-group has-feedback" id="userdiv">
+                    <input type="text" name="username" class="form-control" id="user_name" readonly="readonly">
+                        <span class="glyphicon glyphicon-ok form-control-feedback hidden" id="users"></span>
+                        <span class="glyphicon glyphicon-remove form-control-feedback hidden" id="usere"></span>
+                        <span id="info" class="help-block small"></span>
+                </div>
+                <label for="" class="label label-default">密码</label>
+                <div class="form-group has-feedback" id="pw1div">
+                    <input type="password" name="password" class="form-control" id="pw1" readonly="readonly">
+                        <span class="glyphicon glyphicon-ok form-control-feedback hidden" id="pw1s1"></span>
+                        <span class="glyphicon glyphicon-remove form-control-feedback hidden" id="pw1s2"></span>
+                        <span id="pw1info" class="help-block small"></span>
+                </div>
+                <label for="" class="label label-default ">重复密码</label>
+                <div class="form-group has-feedback" id="pw2div">
+                    <input type="password" name="pw2" class="form-control" id="pw2" readonly="readonly">
+                        <span class="glyphicon glyphicon-ok form-control-feedback hidden" id="pw2s1"></span>
+                        <span class="glyphicon glyphicon-remove form-control-feedback hidden" id="pw2s2"></span>
+                        <span id="pw2info" class="help-block small"></span>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default btn-block login-btn" id="submitbtn">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function(){
+// 用户名判断
+        $('#user_name').blur(function () {
+            var un = $(this).val();
+            if (un == '' || un == null){
+                $('#userdiv').addClass('has-error');
+                $('#usere').removeClass('hidden');
+                return;
+            } else {
+                $('#userdiv').removeClass('has-error');
+                 $('#usere').addClass('hidden')
+            }
+            // console.log(un);
+
+            $.post('/register/verifyname/',
+                    {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        'name':un
+                    },
+                    function (data) {
+// {#                console.log(data);#}
+
+                if (data.data == 'T' || un.length == 0){
+                    $('#userdiv').addClass('has-success');
+                    $('#info').text('');
+                    $('#users').removeClass('hidden')
+                }else {
+                    $('#userdiv').addClass('has-error');
+                    $('#info').text('用户名已存在')
+                }
+                    });
+        });
+// {#        密码判断#}
+        $('#pw1').blur(function () {
+            var pw1 = $(this).val();
+            // console.log(pw1);
+            if (pw1.length == 0 || pw1.length < 6){
+             // console.log('e');
+                $('#pw1div').addClass('has-error');
+                $('#pw1s2').removeClass('hidden');
+                $('#pw1s1').addClass('hidden');
+                $('#pw1info').text('密码长度不足')
+            } else {
+                $('#pw1div').removeClass('has-error').addClass('has-success');
+                $('#pw1s2').addClass('hidden');
+                $('#pw1s1').removeClass('hidden')
+                $('#pw1info').text('')
+            }
+        });
+
+        $('#pw2').blur(function(){
+            var pw2 = $(this).val();
+            var pw1 = $('#pw1').val();
+           // console.log(pw2);
+            if (pw2 != pw1 || pw2.length == 0){
+               // console.log(pw1);
+                $('#pw2div').addClass('has-error');
+                $('#pw2s2').removeClass('hidden');
+                $('#pw2s1').addClass('hidden');
+                $('#pw2info').text('密码不相同，请确认')
+            } else{
+                $('#pw2div').removeClass('has-error').addClass('has-success');
+                $('#pw2s2').addClass('hidden');
+                $('#pw2s1').removeClass('hidden');
+                $('#pw2info').text('')
+            }
+        });
+// {#         提交表单#}
+        $('#submitbtn').click(function () {
+            // console.log($('#userdiv').hasClass('has-success'));
+            // console.log($('#pw1div').hasClass('has-success'));
+            // console.log($('#pw2div').hasClass('has-success'));
+            if ($('#userdiv').hasClass('has-success') && $('#pw1div').hasClass('has-success') && $('#pw2div').hasClass('has-success')){
+                console.log('s');
+                $("#form1").unbind().submit();
+            } else {
+                $('#form1').submit(function () {
+                    console.log('e');
+                    return false;
+                })
+            }
+        })
+
+
+    });
+    </script>
+
+{#<script src="{% static 'zxsite/js/validate.js' %}"></script>#}
+{% endblock %}

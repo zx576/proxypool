@@ -1,0 +1,43 @@
+{% extends 'myproxy/base.html' %}
+{% block chart %}
+    {% load static %}
+    <script src="http://cdn.bootcss.com/echarts/3.4.0/echarts.min.js"></script>
+    <div class="center-block self-chart-mainblock">
+        <hr>
+        <div class='center-block' id="status_" style="width: 668px;height:400px;"></div>
+        <hr>
+        <div class='center-block' id="source_" style="width: 668px;height:400px;"></div>
+        <hr>
+
+
+
+    </div>
+
+{#    <div class='center-block' id="gender" style="width: 668px;height:400px;"></div>#}
+{#    <div class='center-block' id="gender" style="width: 668px;height:400px;"></div>#}
+{#    <div class='center-block' id="gender" style="width: 668px;height:400px;"></div>#}
+
+
+
+
+
+
+
+    <script src="{% static 'myproxy/ehcarts_js/status.js' %}"></script>
+    <script language="JavaScript">
+        var myChart = echarts.init(document.getElementById('status_'));
+        var status_ = {{ status| safe |escape }};
+        var option = func_status(status_);
+        myChart.setOption(option);
+    </script>
+
+
+    <script src="{% static 'myproxy/ehcarts_js/source.js' %}"></script>
+    <script language="JavaScript">
+        var myChart = echarts.init(document.getElementById('source_'));
+        var source = {{ source | safe | escape }};
+        var option = func_source(source);
+        myChart.setOption(option);
+    </script>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'myproxy/css/bootstrap.min.css' %}">
+{#    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">#}
+{#    #}
+    <link rel="stylesheet" href="{% static 'myproxy/css/selfdefine.css' %}">
+{#    用于开发#}
+    <script src="{% static 'myproxy/js/jquery-3.1.1.js' %}"></script>
+    <script src="{% static 'myproxy/js/bootstrap.min.js' %}"></script>
+{#    #}
+
+</head>
+<body style="background-color: #e7e7e7;font-family: 'Segoe UI'">
+{% block index %}{% endblock %}
+{% block chart %}{% endblock %}
+{% block index2 %}{% endblock %}
+{% block login %}{% endblock%}
+{% block register %}{% endblock%}
+</body>
+</html>

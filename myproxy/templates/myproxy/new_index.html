@@ -1,0 +1,34 @@
+
+{% extends 'myproxy/base.html' %}
+{% block index2 %}
+{#{% load static %}#}
+{#<link rel="stylesheet" href="{% static 'myproxy/css/selfdefine.css' %}">#}
+
+<div class="center-block self-container ">
+{#    <div class="self-root-block">#}
+        <div class="center-block self-index-upbtn ">
+
+        <p class="text-center h3">
+            一键开始
+        </p>
+
+        </div>
+        <div class="self-index-btnblock center-block">
+            <button class="btn btn-success btn-block" id="work">crwal</button>
+        </div>
+{#    </div>#}
+</div>
+    <script>
+        $('#work').click(function () {
+            $('#work').addClass('disabled');
+            $.get('work/',function (data) {
+                    alert(data['info']);
+                    if ($('#work').hasClass('disabled')){
+                        $('#work').removeClass('disabled')
+                    }
+                })
+        });
+
+    </script>
+
+{% endblock %}

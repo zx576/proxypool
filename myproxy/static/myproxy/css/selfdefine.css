@@ -1,0 +1,100 @@
+.mainpage{
+    background-color: #2aabd2;
+}
+/*.root-block{*/
+    /*width: 1000px;*/
+    /*height:500px;*/
+    /*background-color: white;*/
+    /*margin-top: 50px;*/
+
+/*}*/
+.root-index-block{
+    /*width: inherit;*/
+    /*background-color: white;*/
+    /*margin-top: 50px;*/
+
+}
+
+
+.self-btn-pos{
+    margin-top: 50px;
+
+}
+
+.self-container{
+    width:400px;
+    height: 350px;
+    background-color: white;
+    margin-top: 150px;
+    padding-top: 20px;
+}
+.self-root-block{
+    margin-top:10px;
+    width: 100%;
+    height: 100%;
+    background-color: bisque;
+}
+
+.self-index-upbtn{
+    /*margin-top: px;*/
+    margin-bottom: 30px;
+    width: 80%;
+    height: 250px;
+    background-color: white;
+    /*border-color: white;*/
+    /*border: 10px;*/
+    border-color:green;
+    border-style: none none dotted none;
+    border-width: 1px;
+    font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    color: green;
+    padding-top: 20%;
+
+}
+
+.self-index-btnblock{
+
+    width: 80%;
+    height: 300px;
+
+}
+.self-chart-mainblock{
+    width: 80%;
+    background-color: white;
+    padding-top: 50px;
+}
+
+.self-index-headblock{
+    width:100%;
+    height:150px;
+    /*background-color: #0f0f0f;*/
+
+}
+/*登陆注册*/
+.self-login-div1{
+    background-color: #ffffff;
+    width: 400px;
+    height:350px;
+    margin-top: 150px;
+}
+.self-login-WB-label{
+    font-size: 30px;
+    text-align: center;
+    margin-top: 30px
+}
+.login-div{
+  margin-top: 500px;
+}
+.form-div{
+    margin-top: 20px;
+}
+.self-login-btn{
+    font-size: large;
+    height:45px;
+}
+.register-div{
+    background-color: #ffffff;
+    width: 400px;
+    height:430px;
+    margin-top: 150px;
+}
