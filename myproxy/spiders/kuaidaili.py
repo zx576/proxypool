@@ -1,6 +1,5 @@
 #-*- coding:utf-8 -*-
 
-import logging
 import requests
 import bs4
 import re
@@ -8,7 +7,6 @@ from selenium import webdriver
 from .general_methods import GeneralMethods
 import time
 
-logger = logging.getLogger(__name__)
 gm = GeneralMethods()
 
 # 快代理请求头# 快代理请求头
@@ -96,9 +94,6 @@ def fetch_k1():
                     type = 'T'
                 else:
                     type = 'O'
-
-                # dic = {}
-                # dic[http_head] = ip + ':' + port
 
                 if ip in KD_IP:
                     continue

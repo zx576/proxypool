@@ -3,11 +3,11 @@
 基于 django 制作的 IP 池，本项目使用 requests+bs4 爬取数据，依托 django 数据库系统保存，通过网络请求从数据库内获取 IP，运行中有疑问可以在 Issues 下
 提交。
 
-##运行环境
+## 运行环境
 
 python 3+
 
-##运行依赖包
+## 运行依赖包
 
 - requests
 - bs4
@@ -15,7 +15,7 @@ python 3+
 - selenium
 - PhantomJS
 
-##下载使用
+## 下载使用
 
 git clone https://github.com/zx576/Crawl_projects.git
 
@@ -40,7 +40,7 @@ http://127.0.0.1:8000/proxy/
 
 将 sche_spider.py 加入计划任务
 
-参考文档:http://mp.weixin.qq.com/s/JKFvnmtlEqaE8GxbX6Fpyw
+参考:http://mp.weixin.qq.com/s/JKFvnmtlEqaE8GxbX6Fpyw
 
 #### 2、linux-cron
 

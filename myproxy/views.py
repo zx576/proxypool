@@ -1,8 +1,7 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse,JsonResponse
+from django.shortcuts import render
+from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 
-import logging
 import json
 import datetime
 import requests
@@ -13,9 +12,6 @@ from .models import Proxy
 from .VerifyProxy import  verify
 from .SortDt import sort
 from .fetch import crwal
-
-# 日志
-logger = logging.getLogger(__name__)
 
 
 
@@ -38,13 +34,6 @@ def manage(request):
 TASKS = [crwal,sort,verify]
 def work(request):
     if request.method == 'GET':
-        # processes = []
-        # for i in TASKS:
-        #     p = multiprocessing.Process(target=i)
-        #     processes.append(i)
-        #
-        # for process in processes:
-        #     process.start()
         crwal()
         sort()
         verify()
@@ -162,6 +151,9 @@ def verify_ip(dic):
 
 
 # ================查看数据库结果=============================================
+
+Websites = ['IP181','西刺','66代理','快代理']
+
 def chart(request):
     if request.method == 'GET':
         all_proxies = Proxy.objects.all()
@@ -169,10 +161,9 @@ def chart(request):
         valid_proxies = all_proxies.filter(status='V')
         invalid_proxies = all_proxies.filter(status='I')
 
-        ip181_proxies = valid_proxies.filter(resourse='IP181')
-        xici_proxies = valid_proxies.filter(resourse='西刺')
-        sixsix_proxies = valid_proxies.filter(resourse='66代理')
-        kuai_proxies = valid_proxies.filter(resourse='快代理')
+        data = {}
+        for site in Websites:
+            data[site] = valid_proxies.filter(resourse=site)
 
         #=========ip 状态 饼图 ==============
         status = {}
@@ -197,20 +188,15 @@ def chart(request):
 
         source = {}
 
-        count_ip181 = len(ip181_proxies)
-        count_xici = len(xici_proxies)
-        count_sixsix = len(sixsix_proxies)
-        count_kuai = len(kuai_proxies)
 
         source['title_text'] = '来源库存'
         source['series_name'] = 'IP 来源'
-        source['legend_data'] = ['西刺代理','IP181代理','66代理','快代理']
-        source['series_data'] = [
-            {'name':'西刺代理','value':count_xici},
-            {'name':'IP181代理','value':count_ip181},
-            {'name':'66代理','value':count_sixsix},
-            {'name':'快代理','value':count_kuai}
-        ]
+        source['legend_data'] = Websites
+        source['series_data'] = []
+
+        for key,value in data.items():
+            item = {'name':key,'value':len(value)}
+            source['series_data'].append(item)
 
         source = json.dumps(source,cls=DjangoJSONEncoder)
         # ========================================
@@ -223,235 +209,3 @@ def chart(request):
         return render(request,'myproxy/chart.html',content)
 
 
-# ============================已=============================================
-# =============================弃============================================
-# ===============================用==========================================
-
-
-''' 
-
-def sort(requests):
-    对已存入数据做整理，根据传入的参数做相应的去重/删除无效IP 等操作
-
-    :param requests:
-    :return:
-    
-    if requests.method == 'GET':
-        print(requests)
-        deduplication = requests.GET.get('dd',None)
-        delete = requests.GET.get('di',None)
-
-        count_di,count_dd = 0,0
-
-        if deduplication:
-            print('正在去重')
-            count_dd = deduplicate()
-            print('去重结束')
-            logging.info('时间：%r,本次去重 %d 条'%(datetime.datetime.now(),count_dd))
-
-        if delete:
-            print('正在删除无效')
-            count_di = delete_invalid()
-            print('删除结束')
-            logging.info('时间：%r,本次删除 %d 条' % (datetime.datetime.now(), count_di))
-
-        return HttpResponse('去重 %d 条，删除无效ip %d 条'%(count_dd,count_di))
-
-
-
-def deduplicate():
-    all_ip = Proxy.objects.filter(status='V')
-    list_ip = []
-    count = 0
-    for ip in all_ip:
-        if ip.addr in list_ip:
-            count += 1
-            ip.delete()
-        list_ip.append(ip.addr)
-
-    return count
-
-
-def delete_invalid():
-    invalid_ip = Proxy.objects.filter(status='I')
-    count = len(invalid_ip)
-    invalid_ip.delete()
-    return count
-
-
-# ===========爬取 IP 事件 ================================================================
-
-SCHEDUAL_STATUS = True
-TIME_DELTA = 1
-
-def work(request):
-    验证并爬取 IP
-
-    timedelta 为验证爬取间隔时间，默认为 1 小时
-    
-    global SCHEDUAL_STATUS
-    if request.method == 'GET':
-        logging.info(request)
-        try:
-            timedelta = request.GET.get('timedelta')
-            timedelta = int(timedelta)
-        except:
-            timedelta = TIME_DELTA
-
-        schedule.every(timedelta).hours.do(download_ip)
-
-        schedule.run_all()
-        while True:
-            if not SCHEDUAL_STATUS:
-                schedule.clear()
-                SCHEDUAL_STATUS = True
-                return JsonResponse({'info':'finished post'})
-            schedule.run_pending()
-
-
-def stop_crwal(request):
-    global SCHEDUAL_STATUS
-    if request.method == 'GET':
-        SCHEDUAL_STATUS = False
-        return JsonResponse({'info': 'finished get'})
-
-
-@register.filter
-def get_value(dumped_dict,key):
-    content = re.sub('\'', '\"', dumped_dict)
-    dic = json.loads(content)
-    full_addr = list(dic.values())[0].split(':')
-    if len(full_addr) == 2:
-        addr = full_addr[0]
-        port = full_addr[1]
-    elif len(full_addr) == 3:
-        addr = full_addr[1][2:]
-        port = full_addr[2]
-    else:
-        return None
-    addr_type = list(dic.keys())[0]
-    if key == 'type':
-        return addr_type
-    elif key == 'port':
-        return port
-    elif key == 'addr':
-        return addr
-
-@register.filter
-def get_addr(dumped_dict):
-    content = re.sub('\'', '\"', dumped_dict)
-    dic = json.loads(content)
-
-
-
-# ====================清除错误 ip ====================
-
-def clear(request):
-    if request.method == 'GET':
-        all_addr = Proxy.objects.all()
-
-        for addr in all_addr:
-            if addr.ip:
-                continue
-            else:
-                addr.delete()
-
-        return HttpResponse('clear')
-        
-        
-# ============登陆 注册===============================================================
-
-def login_(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username,password=password)
-        if user and user.is_active:
-            login(request,user)
-            if request.GET.get('next'):
-                return redirect(request.GET['next'])
-            else:
-                return redirect('/proxy')
-        else:
-            return redirect('/proxy/login/')
-    return render(request,'myproxy/login.html')
-
-def register_(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user_ins = User.objects.create_user(
-            username = username,
-            password = password
-        )
-        newuser = authenticate(username=username,password=password)
-        login(request,newuser)
-        return redirect('/proxy')
-
-    return render(request,'myproxy/register.html')
-
-def log_out(request):
-    logout(request)
-    return redirect('/proxy')
-# ===========验证 IP 事件================================================================
-
-VERIFY_TIME_DELTA = 8
-VERIFY_OR_NOT = True
-
-def verify(request):
-    验证数据库中的 IP 是否可用
-    如果通过验证，在字段 Validated_time 的基础上 加一
-    未通过验证，字段 status 变为 I 表示 invalid
-
-    
-    global VERIFY_OR_NOT
-    if request.method == 'GET':
-        try:
-            timedelta = request.GET.get('timedelta')
-            timedelta = int(timedelta)
-        except:
-            timedelta = VERIFY_TIME_DELTA
-
-        # if ve != 'False':
-        schedule.every(timedelta).hours.do(_verify)
-        schedule.run_all()
-        while True:
-            if not VERIFY_OR_NOT:
-                schedule.clear()
-                VERIFY_OR_NOT = True
-                return JsonResponse({'info':'finished post'})
-            schedule.run_pending()
-
-        # print('finishing')
-    return HttpResponse("验证 IP 完成")
-
-def _verify():
-    验证数据库中所有状态为 V 的 IP
-
-    通过验证则 Validated_time + 1
-    未通过则修改 status 为 I
-
-    
-    print('start verfying')
-    all_ip = Proxy.objects.all()
-    for ip in all_ip:
-        proxy = {}
-        proxy[ip.head] = ip.ip + ':' + ip.port
-        if not verify_ip(proxy):
-            ip.status = 'I'
-            ip.failed_time += 1
-            # ip.save()
-        ip.Validated_time += 1
-        ip.status = 'V'
-        ip.failed_time = 0
-        ip.save()
-
-
-
-def stop_verify(request):
-    if request.method == 'GET':
-        VERIFY_OR_NOT = False
-        return HttpResponse('finished')
-
-
-'''

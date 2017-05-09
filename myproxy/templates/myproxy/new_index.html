@@ -22,7 +22,7 @@
         $('#work').click(function () {
             $('#work').addClass('disabled');
             $.get('work/',function (data) {
-                    alert(data['info']);
+                    alert(data['data']);
                     if ($('#work').hasClass('disabled')){
                         $('#work').removeClass('disabled')
                     }

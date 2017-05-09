@@ -1,14 +1,9 @@
 #-*- coding:utf-8 -*-
 
-import logging
-import requests
 import bs4
-import re
-from selenium import webdriver
 from .general_methods import GeneralMethods
-import time
 
-logger = logging.getLogger(__name__)
+
 gm = GeneralMethods()
 
 # 66代理网 请求头
@@ -88,9 +83,6 @@ def fetch_ss_1(url):
             else:
                 type = 'O'
 
-            # dic = {}
-            # dic["http"] = ip +':'+ port
-
             if ip in SS_IP:
                 continue
             SS_IP.append(ip)
@@ -98,5 +90,4 @@ def fetch_ss_1(url):
             gm.save_proxy('66代理',ip,port,'none',district=district,http_type=type)
     except Exception as e:
         print('fetch_ss_1 请求 %s 报错，错误信息：%s' % (url, e))
-        # continue
         return None

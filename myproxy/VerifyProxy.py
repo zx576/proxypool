@@ -4,7 +4,7 @@ import requests
 
 
 def verify_all():
-    ''' verify all proxy in the database
+    ''' verify all proxies in the database
         
     if it is valid , this proxy's field 'Validate_time' will add 1,and 
         field 'failed_time' will be reset to 0.

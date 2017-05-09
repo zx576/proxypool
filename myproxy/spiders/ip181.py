@@ -42,10 +42,6 @@ def ip181():
                 district = district.strip()
 
 
-            # dic = {}
-            # proxy = ip + ':' + port
-            # dic[http_head] = proxy
-
             if '高匿' in http_type:
                 type = 'G'
             elif '透明' in http_type:

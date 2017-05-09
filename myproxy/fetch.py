@@ -1,11 +1,9 @@
 #-*- coding:utf-8 -*-
 
-import logging
 import threading
 
 from .spiders import xici,sixsix,kuaidaili,ip181
 
-logger = logging.getLogger(__name__)
 
 XICI      = xici.fetch_xici
 SIXSIX    = sixsix.fetch_ss

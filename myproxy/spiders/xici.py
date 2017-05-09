@@ -1,12 +1,9 @@
 #-*- coding:utf-8 -*-
 
-import logging
-import requests
 import bs4
 
 from .general_methods import GeneralMethods
 
-logger = logging.getLogger(__name__)
 gm = GeneralMethods()
 
 # 通用请求头

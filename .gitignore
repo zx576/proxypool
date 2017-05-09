@@ -1,5 +1,5 @@
 *.txt
 .idea
 *.idea
-*.jpg
-*.png
+*.pyc
+.__pycache__

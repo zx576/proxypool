@@ -1,13 +1,10 @@
 #-*- coding:utf-8 -*-
 from ..models import Proxy
-import logging
 
 import requests
 from selenium import webdriver
 
 
-logger = logging.getLogger(__name__)
-# ALL_ADDR = []
 
 class GeneralMethods():
     def __init__(self):
