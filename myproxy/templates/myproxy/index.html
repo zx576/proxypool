@@ -12,12 +12,15 @@
                 <p class="h3">
                     Made by zx
                 </p>
+                {% if user.is_staff %}
                 <ol class="breadcrumb" style="background-color: #e7e7e7;margin-left: -12px">
 
                     <li><a href="{% url 'manage' %}">work</a></li>
                     <li><a href="{% url 'chart' %}">chart</a></li>
 
                 </ol>
+                {% endif %}
+
 
             </div>
 
@@ -30,7 +33,7 @@
                         <th>匿名度</th>
                         <th>Type</th>
                         <th>Location</th>
-                        <th>IP 来源</th>
+{#                        <th>IP 来源</th>#}
                         <th>最后验证时间</th>
                       </tr>
                       {% for item in items %}
@@ -40,7 +43,7 @@
                         <td>{{item.get_type_display}}</td>
                         <td>{{item.head}}</td>
                         <td>{{item.district}}</td>
-                        <td>{{item.resourse}}</td>
+{#                        <td>{{item.resourse}}</td>#}
                         <td>{{item.last_modified_time}}</td>
                       </tr>
                       {% endfor %}

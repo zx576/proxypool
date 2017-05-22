@@ -1,8 +1,9 @@
 #-*- coding:utf-8 -*-
-from ..models import Proxy
-
 import requests
+import time
+from ..models import Proxy
 from selenium import webdriver
+
 
 
 
@@ -88,7 +89,7 @@ class GeneralMethods():
             return False
 
 
-    def get_cookie_by_selenium(self,url):
+    def get_cookie_by_selenium(self, url):
         '''使用 selenium 获取 cookie
     
         :param url: 获取 cookie 的地址
@@ -100,6 +101,21 @@ class GeneralMethods():
         cookiestr = ';'.join(item for item in cookie)
         driver.quit()
         return cookiestr
+
+
+    def get_source_by_selenium(self, url):
+        driver = webdriver.PhantomJS()
+        driver.get(url)
+
+        page_state = ''
+        while True:
+            page_state = driver.execute_script('return document.readyState;')
+            if page_state == 'complete':
+                break
+            time.sleep(3)
+
+
+        return driver.page_source
 
 
     def req_url(self,url, headers, rep_count=1):
@@ -124,7 +140,7 @@ class GeneralMethods():
                 headers['Cookie'] = cookie
                 return self.req_url(url, headers, rep_count=2)
             else:
-                print('url：%s 第二次报错，报错信息：%s' %(url,e))
+                print('url：%s 第二次报错，报错信息：%s，已转为 selenium 获取页面信息' %(url,e))
                 return None
 
         else:

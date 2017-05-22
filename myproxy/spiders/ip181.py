@@ -19,8 +19,7 @@ def ip181():
     url = 'http://www.ip181.com/'
     content = gm.req_url(url,headers_general)
     if not content:
-        print('errors happen when requests url:',url)
-        return None
+        content = gm.get_source_by_selenium(url)
 
     content = content.encode('ISO-8859-1')
 

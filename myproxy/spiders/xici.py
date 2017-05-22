@@ -24,8 +24,7 @@ def fetch_xici():
     for url in urls:
         content = gm.req_url(url, headers_general)
         if not content:
-            print('error happened when request url:', url)
-            continue
+            content = gm.get_source_by_selenium(url)
 
         try:
             soup = bs4.BeautifulSoup(content, 'lxml')
