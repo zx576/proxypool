@@ -1,14 +1,15 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.admin.views.decorators import staff_member_required
 
 import json
+from datetime import datetime, timezone
 import datetime
 import requests
 
 
-from .models import Proxy
+from .models import Proxy, IpAddr
 
 from .VerifyProxy import  verify
 from .SortDt import sort
@@ -18,7 +19,7 @@ from .fetch import crwal
 
 # ===========首页==========================================================
 def index(request):
-    items = Proxy.objects.filter(status='V').order_by('-created_time')[:100]
+    items = Proxy.objects.filter(status='V').order_by('-created_time')[:50]
 
     contents = {
         'items':items,
@@ -70,6 +71,14 @@ def get(request):
 
     '''
     global VERIFY_STATUS
+
+    judge = judge_request(request)
+    if not judge:
+        data = {}
+        data['code'] = 0
+        return JsonResponse(data)
+
+
     if request.method == 'GET':
         valid_ip = Proxy.objects.filter(status='V')
         num = request.GET.get('num',None)
@@ -136,6 +145,7 @@ def get(request):
             count += 1
             ip_list.append(proxy)
         data['proxies'] = ip_list
+        data['code'] = 1
         return JsonResponse(data)
 
 def verify_ip(dic):
@@ -211,4 +221,51 @@ def chart(request):
 
         return render(request,'myproxy/chart.html',content)
 
+
+# ================api 说明=============================================
+
+def api_ins(request):
+
+    return render(request,'myproxy/api_instruction.html')
+
+
+# ================ 防止请求过快 ====================================
+
+def judge_request(request):
+
+    addr = request.META.get('REMOTE_ADDR')
+    query = IpAddr.objects.filter(addr=addr)
+    if query:
+
+        addrins = query[0]
+
+        if addrins.limit == 'T':
+            return False
+        if addrins.limit_count > 5:
+            addrins.limit = 'T'
+
+        addrins.req_count += 1
+        diff_timedelta = datetime.now(timezone.utc) - addrins.last_modified_time
+        print(diff_timedelta)
+        diff = diff_timedelta.seconds
+        print(diff)
+
+        if diff < 3:
+            addrins.limit_count += 1
+            return False
+
+        addrins.save()
+
+
+    else:
+        IpAddr.objects.create(
+            addr = addr,
+            req_count = 1,
+        )
+
+    return True
+
+    # content = ['addr: ',addr]
+
+    # return HttpResponse(content)
 

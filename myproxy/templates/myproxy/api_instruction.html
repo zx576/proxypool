@@ -1,0 +1,148 @@
+{% extends 'myproxy/base.html' %}
+{% block api%}
+
+    <div class="center-block self-api-mainblock">
+
+        <h2 class="text-center"><strong>API 接口指南</strong></h2>
+        <hr>
+
+        <div class="center-block self-api-textblock">
+
+            <div>
+                <h4>API 接口地址 : </h4>
+                <a href="http://127.0.0.1:8000/proxy/get/">http://127.0.0.1:8000/proxy/get/</a>
+            </div>
+            <hr>
+
+            <div>
+                <h4>API 接口说明 : </h4>
+                <p>HTTP GET 接口</p>
+                <p>接口调用频率：3秒1次</p>
+            </div>
+
+
+            <hr>
+
+            <h4>API 接口参数 : </h4>
+                <br>
+            <table class="table table-striped table-bordered">
+
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Type</td>
+                        <td>Description</td>
+                        <td>Must</td>
+                        <td>Example</td>
+                        <td>Remarks</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>num</td>
+                        <td>int</td>
+                        <td>IP 数量</td>
+                        <td>必须</td>
+                        <td>10</td>
+                        <td>每次最多提取 100 个</td>
+                    </tr>
+                    <tr>
+                        <td>v</td>
+                        <td>bool</td>
+                        <td>是否验证</td>
+                        <td>可选</td>
+                        <td>true/false</td>
+                        <td>大小写不敏感,True也是可以的，其他值一律视为 false</td>
+
+                    </tr>
+                    <tr>
+                        <td>v_num</td>
+                        <td>int</td>
+                        <td>验证通过次数</td>
+                        <td>可选</td>
+                        <td>5</td>
+                        <td>原则上通过次数越多 IP 越稳定，但 IP 数量越少</td>
+                    </tr>
+                    <tr>
+                        <td>type</td>
+                        <td>str</td>
+                        <td>ip 匿名类型</td>
+                        <td>可选</td>
+                        <td>G</td>
+                        <td>G-'高匿',T-'透明',O-'其他'</td>
+                    </tr>
+                    		 		
+                    <tr>
+                        <td>head</td>
+                        <td>str</td>
+                        <td>IP 类型</td>
+                        <td>可选</td>
+                        <td>https</td>
+                        <td>https 或者 http，默认为 http</td>
+                    </tr>
+                    <tr>
+                        <td>loc</td>
+                        <td>str</td>
+                        <td>地区</td>
+                        <td>可选</td>
+                        <td>上海</td>
+                        <td>尽量以省市一级的地名查询</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+            <div>
+                <h4>举例说明: </h4>
+                <br>
+                <p>获取 10 个 IP<a href=""></a></p>
+                <p>获取 10 个验证可用的 IP <a href=""></a></p>
+                <p>获取 10 个 https 类型、高匿、地址为上海的 IP <a href=""></a></p>
+            </div>
+
+            <hr>
+
+            <div>
+                <h4>返回示例: </h4>
+
+                <pre>
+{
+    "proxies": [
+        {
+            "http": "117.90.0.225:9000"
+        },
+        {
+            "http": "186.154.146.26:8080"
+        },
+        {
+            "http": "175.155.25.27:808"
+        },
+        {
+            "http": "124.88.67.52:843"
+        },
+        {
+            "http": "119.5.0.7:808"
+        }
+    ]
+    "code": 1
+}</pre>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

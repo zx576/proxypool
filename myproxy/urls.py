@@ -16,11 +16,12 @@ urlpatterns = [
     url(r'sort/$',views.sort,name='sort'),
 
     url(r'chart/$',views.chart,name='chart'),
+    url(r'api-ins/$',views.api_ins,name='api'),
 
     # url(r'login/$',views.login_,name='login'),
     # url(r'register/$',views.register_,name = 'register'),
 
-
+    url(r'req/$',views.judge_request,name='req')
     #temp
     # url(r'clear/$',views.clear,name='clear')
 ]

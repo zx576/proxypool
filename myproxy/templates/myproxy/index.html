@@ -1,28 +1,27 @@
 {% extends 'myproxy/base.html' %}
 {% block index %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-            <div class="self-index-headblock">
 
-                <p class="h1">
-                    Free Proxy
-                </p>
-                <p class="h3">
-                    Made by zx
-                </p>
-                {% if user.is_staff %}
-                <ol class="breadcrumb" style="background-color: #e7e7e7;margin-left: -12px">
+{#            <div class="self-index-headblock">#}
+{##}
+{#                <p class="h1">#}
+{#                    Free Proxy#}
+{#                </p>#}
+{#                <p class="h3">#}
+{#                    Made by zx#}
+{#                </p>#}
 
-                    <li><a href="{% url 'manage' %}">work</a></li>
-                    <li><a href="{% url 'chart' %}">chart</a></li>
-
-                </ol>
-                {% endif %}
+{#                <ol class="breadcrumb" style="background-color: #e7e7e7;margin-left: -12px">#}
+{#                {% if user.is_staff %}#}
+{#                    <li><a href="{% url 'manage' %}">work</a></li>#}
+{#                    <li><a href="{% url 'chart' %}">chart</a></li>#}
+{#                {% endif %}#}
+{#                    <li><a href="{% url 'api' %}">API 说明</a></li>#}
+{#                </ol>#}
 
 
-            </div>
+
+
+{#            </div>#}
 
             <div class="center-block root-index-block">
 {#              <p style="color:white">免费代理 IP</p>#}
@@ -49,9 +48,5 @@
                       {% endfor %}
                   </table>
             </div>
-        </div>
-        <div class="col-md-1"></div>
-    </div>
-</div>
 
 {% endblock %}

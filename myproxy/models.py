@@ -37,3 +37,27 @@ class Proxy(models.Model):
     # 按照插入顺序有后向前排列
     class meta:
         ordering = ['-lasted_modified_time']
+
+
+class IpAddr(models.Model):
+
+    addr = models.CharField('请求IP地址', max_length=100)
+
+    req_count = models.IntegerField('总请求次数', default=0)
+    limit_count = models.IntegerField('限制请求次数', default=0)
+
+    LIMIT = (
+        ('T', '限制'),
+        ('F', '不限制')
+    )
+    limit = models.CharField('限制访问',max_length=10, choices=LIMIT, default='F')
+
+    created_time = models.DateTimeField('创建时间', auto_now_add=True)
+    last_modified_time = models.DateTimeField('修改时间', auto_now=True)
+
+    def __str__(self):
+        return self.addr
+
+
+
+

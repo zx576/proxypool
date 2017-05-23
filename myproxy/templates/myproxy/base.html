@@ -15,13 +15,59 @@
 {#    #}
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-    
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=30493657" charset="UTF-8"></script>
+
 </head>
 <body style="background-color: #e7e7e7;font-family: 'Segoe UI'">
-{% block index %}{% endblock %}
-{% block chart %}{% endblock %}
-{% block index2 %}{% endblock %}
-{% block login %}{% endblock%}
-{% block register %}{% endblock%}
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="center-block self-base-head row">
+            <div class="col-md-6">
+
+                <h2 class="self-base-h2"><strong>免费代理工具</strong></h2>
+
+
+                 <ol class="breadcrumb" style="background-color: #e7e7e7;margin-left: -12px">
+                    <li><a href="/proxy">最新代理 IP</a></li>
+                {% if user.is_staff %}
+                    <li><a href="{% url 'manage' %}">work</a></li>
+                    <li><a href="{% url 'chart' %}">chart</a></li>
+                {% endif %}
+                    <li><a href="{% url 'api' %}">API 说明</a></li>
+                    <li><a href="http://crossincode.com" target="_blank">编程教室主页</a></li>
+
+                </ol>
+
+            </div>
+            <div class="col-md-4 self-base-p">
+                <p>Crossin 的编程教室</p>
+                <p>crossincode.com</p>
+                <p>微信公众号: crossincode</p>
+
+            </div>
+
+            <div class="col-md-2">
+                <img src="{% static 'myproxy/img/0546.png' %}" alt="" style="height: 150px;padding-top: 10px">
+            </div>
+
+        </div>
+
+        <hr style="height:2px;border:none;border-top:2px solid #555555;width: 80%" />
+
+        {% block index %}{% endblock %}
+        {% block chart %}{% endblock %}
+        {% block index2 %}{% endblock %}
+        {% block login %}{% endblock%}
+        {% block register %}{% endblock%}
+        {% block api %}{% endblock %}
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
+
+
+
 </body>
 </html>
