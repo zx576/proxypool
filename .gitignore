@@ -11,5 +11,4 @@ proxypool.conf.save
 testu.py
 uwsgi_params
 ghostdriver.log
-db.sqlite3
 
