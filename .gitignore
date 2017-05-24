@@ -10,5 +10,4 @@ myproxy.conf
 proxypool.conf.save
 testu.py
 uwsgi_params
-db.sqlite3
 ghostdriver.log
