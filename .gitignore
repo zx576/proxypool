@@ -3,3 +3,10 @@
 *.idea
 *.pyc
 __pycache__/
+chart.png
+ghostfriver.log
+myproxy_uwsgi.ini
+myproxy.conf
+proxypool.conf.save
+testu.py
+uwsgi_params

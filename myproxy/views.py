@@ -4,8 +4,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.admin.views.decorators import staff_member_required
 
 import json
-from datetime import datetime, timezone
-import datetime
+from datetime import datetime, timezone, date
+
+# import datetime
 import requests
 
 
@@ -70,7 +71,7 @@ def get(request):
     location - where these ips' location
 
     '''
-    global VERIFY_STATUS
+    # global VERIFY_STATUS
 
     judge = judge_request(request)
     if not judge:
@@ -144,8 +145,10 @@ def get(request):
                 continue
             count += 1
             ip_list.append(proxy)
+
         data['proxies'] = ip_list
         data['code'] = 1
+        
         return JsonResponse(data)
 
 def verify_ip(dic):
@@ -190,7 +193,7 @@ def chart(request):
             {'name':'无效','value':count_invalid}
         ]
         status['title_text'] = '数据库内 IP 状态'
-        status['title_subtext'] = '截止到 %s'%datetime.date.today()
+        status['title_subtext'] = '截止到 %s'%date.today()
 
         status['series_name'] = 'IP 状态'
 
@@ -268,4 +271,3 @@ def judge_request(request):
     # content = ['addr: ',addr]
 
     # return HttpResponse(content)
-
