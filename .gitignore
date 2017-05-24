@@ -12,4 +12,7 @@ testu.py
 uwsgi_params
 ghostdriver.log
 db.sqlite3
+*.log
+nohup.out
+
 
