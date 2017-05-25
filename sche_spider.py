@@ -25,5 +25,4 @@ def handle_tasks():
 
 
 handle_tasks()
-a = input()
-
+# a = input()
