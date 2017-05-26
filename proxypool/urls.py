@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^proxy/',include('myproxy.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^proxy/admin/', admin.site.urls),
 ]
