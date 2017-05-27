@@ -13,3 +13,4 @@ uwsgi_params
 ghostdriver.log
 *.log
 nohup.out
+db.sqlite3
