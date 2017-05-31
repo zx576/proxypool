@@ -3,9 +3,13 @@
 基于 django 制作的 IP 池，本项目使用 requests+bs4 爬取数据，依托 django 数据库系统保存，通过网络请求从数据库内获取 IP，运行中有疑问可以在 Issues 下
 提交。
 
+该 IP 池已经在线部署到以下地址：lab.crossincode.com/proxy
+
 ## 运行环境
 
-python 3+
+- python 3+
+- django 1.10
+- linux/windows
 
 ## 运行依赖包
 
@@ -17,7 +21,7 @@ python 3+
 
 ## 下载使用
 
-git clone https://github.com/zx576/Crawl_projects.git
+`git clone https://github.com/zx576/Crawl_projects.git`
 
 进入项目文件夹
 
@@ -34,7 +38,6 @@ git clone https://github.com/zx576/Crawl_projects.git
 访问首页
 http://127.0.0.1:8000/proxy/
 
-
 ### 运行爬虫任务
 #### 1、windows 下计划任务
 
@@ -50,7 +53,7 @@ http://127.0.0.1:8000/proxy/
 
 添加计划任务，示例
 
-`0 4 * * *  python3 sche_spider.py`
+`0 */4 * * *  python3 sche_spider.py`
 
 表示每 4 个小时运行一遍爬取任务
 
@@ -124,6 +127,8 @@ API 地址
 
 http://127.0.0.1:8000/proxy/get/
 
+在线地址：http://lab.crossincode.com/proxy/get/
+
 #### 参数
 
 | name      | type | Description | Must | example | Remarks |
@@ -137,6 +142,10 @@ http://127.0.0.1:8000/proxy/get/
 
 示例: http://127.0.0.1:8000/proxy/get/?num=50&v_num=5&head=https&loc=上海
 
+在线地址: http://lab.crossincode.com/proxy/get/?num=50&v_num=5&head=https&loc=上海
+
+
+
 说明: 提取100个ip , 通过验证次数大于等于 5，https 类型，ip坐标上海
 
 ### 查看数据库情况
@@ -145,12 +154,10 @@ http://127.0.0.1:8000/proxy/get/
 
 启动 django 项目之后，进入网页
 
-http://127.0.0.1:8000/admin
+http://127.0.0.1:8000/proxy/admin
 
 #### 可视化图表
 
 结合 echarts 做了可视化图表
 
-请求地址:http://127.0.0.1:8000/proxy/chart/
-
-效果图:
+地址:http://127.0.0.1:8000/proxy/chart/
