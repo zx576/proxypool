@@ -49,6 +49,8 @@ def work(request):
 
 # 限定每次最多可取 100 个 IP
 MAX_REQUIRED_NUM = 100
+DEFAULT_NUM = 10
+
 # VERIFY_STATUS = False
 
 def get(request):
@@ -81,7 +83,7 @@ def get(request):
 
 
     if request.method == 'GET':
-        valid_ip = Proxy.objects.filter(status='V')
+        valid_ip = Proxy.objects.filter(status='V').order_by('-Validated_time')
         num = request.GET.get('num',None)
         if num :
             try:
@@ -89,11 +91,13 @@ def get(request):
                 if num > MAX_REQUIRED_NUM:
                     num = MAX_REQUIRED_NUM
             except:
-                error = {'error':'require a integer'}
-                return JsonResponse(error)
+                # error = {'error':'require a integer'}
+                # return JsonResponse(error)
+                num = DEFAULT_NUM
         else:
-            error = {'error': 'require a parameter num '}
-            return JsonResponse(error)
+            # error = {'error': 'require a parameter num '}
+            # return JsonResponse(error)
+            num = DEFAULT_NUM
 
         v_num = request.GET.get('v_num',None)
         if v_num:
@@ -117,11 +121,13 @@ def get(request):
             valid_ip = valid_ip.filter(district__contains = location)
 
         head = request.GET.get('head',None)
-        if head and head.lower() in ['http','https']:
-            head = head
-            valid_ip = valid_ip.filter(head__contains=head)
+        if head and head.lower() == 'https':
+            head = 'HTTPS'
+
         else:
-            head = 'http'
+            head = 'HTTP'
+
+        valid_ip = valid_ip.filter(head__contains=head)
 
         v = request.GET.get('v',None)
         if v and v.lower() == 'true':
@@ -134,6 +140,7 @@ def get(request):
         count = 0
 
         for i in valid_ip:
+            print('count={0},num={1},v_time:{2}'.format(count, num, i.Validated_time))
             if count == num:
                 break
             if not i.ip:
@@ -148,7 +155,7 @@ def get(request):
 
         data['proxies'] = ip_list
         data['code'] = 1
-        
+
         return JsonResponse(data)
 
 def verify_ip(dic):
@@ -157,11 +164,14 @@ def verify_ip(dic):
     :return: 如果请求成功则返回 True, 反之 False
     '''
     fixed_url = 'http://www.baidu.com/'
+    # print('v_code:', dic)
     try:
         res = requests.get(fixed_url, proxies=dic, timeout=1)
         assert res.status_code == 200
+        print('v_code:{},suc'.format(dic))
         return True
     except:
+        print('v_code: {},fail'.format(dic))
         return False
 
 
