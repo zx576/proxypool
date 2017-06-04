@@ -46,6 +46,7 @@ def verify_proxy(dic):
     try:
         res = requests.get(fixed_url, proxies=dic, timeout=1)
         assert res.status_code == 200
+        print('{} is ok'.format(dic))
         return True
     except:
         return False

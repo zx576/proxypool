@@ -6,9 +6,9 @@ import threading
 
 from myproxy.fetch import crwal
 from myproxy.SortDt import sort
-from myproxy.VerifyProxy import verify
+# from myproxy.VerifyProxy import verify
 
-TASKS = [crwal,sort,verify]
+TASKS = [crwal,sort]
 
 def handle_tasks():
 
