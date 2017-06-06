@@ -4,7 +4,10 @@ import time
 from ..models import Proxy
 from selenium import webdriver
 
+from ..checkip import CheckIp
 
+# 初始化
+checkip = CheckIp()
 
 
 class GeneralMethods():
@@ -35,10 +38,16 @@ class GeneralMethods():
         if head == 'none' or ',' in head :
             head = ['http','https']
             res = []
+
             for i in head:
                 proxy = {}
-                proxy[i] = ip + ':' + port
-                if self.verify_ip(proxy):
+                proxy[i] = 'http://' + ip + ':' + port
+
+                is_https = False
+                if i == 'https':
+                    is_https = True
+
+                if self.verify_ip(proxy, http_type, is_https):
                     res.append(True)
                 else:
                     res.append(False)
@@ -53,11 +62,13 @@ class GeneralMethods():
                 head = None
 
 
+
+
         else:
             head = head.lower()
             proxy = {}
-            proxy[head] = ip + ':' + port
-            if not self.verify_ip(proxy):
+            proxy[head] = 'http://'+ip + ':' + port
+            if not self.verify_ip(proxy, http_type, head):
                 head = None
         if head:
             # 验证可用后存入数据库
@@ -74,19 +85,26 @@ class GeneralMethods():
 
 
     # 首次验证 ip 是否可用
-    def verify_ip(self,dic):
+    def verify_ip(self, dic, type, is_https):
         '''
     
         :param dic: 字典形式的 IP
         :return: 如果请求成功则返回 True,反之则 False
         '''
-        fixed_url = 'http://www.baidu.com/'
-        try:
-            res = requests.get(fixed_url, proxies=dic, timeout=1)
-            assert res.status_code == 200
+        # fixed_url = 'http://www.baidu.com/'
+        # try:
+        #     res = requests.get(fixed_url, proxies=dic, timeout=1)
+        #     assert res.status_code == 200
+        #     return True
+        # except:
+        #     return False
+        if checkip.check(dic, type, is_https):
+            # print('正确ip:',dic)
             return True
-        except:
+        else:
             return False
+
+
 
 
     def get_cookie_by_selenium(self, url):

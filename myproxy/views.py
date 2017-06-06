@@ -47,9 +47,9 @@ def work(request):
 
 # ===========提取 IP ======================================================
 
-# 限定每次最多可取 100 个 IP
-MAX_REQUIRED_NUM = 100
-DEFAULT_NUM = 10
+# 限定每次最多可取 20 个 IP
+MAX_REQUIRED_NUM = 20
+DEFAULT_NUM = 5
 
 # VERIFY_STATUS = False
 
@@ -83,7 +83,7 @@ def get(request):
 
 
     if request.method == 'GET':
-        valid_ip = Proxy.objects.filter(status='V').order_by('-Validated_time')
+        valid_ip = Proxy.objects.filter(status='V').order_by('-last_modified_time')
         num = request.GET.get('num',None)
         if num :
             try:
@@ -108,6 +108,7 @@ def get(request):
                 pass
         else:
             pass
+
         type = request.GET.get('type',None)
         if type and type.upper() in ['O','G','T']:
             # type = type
@@ -122,34 +123,36 @@ def get(request):
 
         head = request.GET.get('head',None)
         if head and head.lower() == 'https':
-            head = 'HTTPS'
+            head = 'https'
 
         else:
-            head = 'HTTP'
+            head = 'http'
 
         valid_ip = valid_ip.filter(head__contains=head)
 
-        v = request.GET.get('v',None)
-        if v and v.lower() == 'true':
-            v = True
-        else:
-            v = None
+        # v = request.GET.get('v',None)
+        # if v and v.lower() == 'true':
+        #     v = True
+        # else:
+        #     v = None
 
         data = {}
         ip_list = []
         count = 0
 
         for i in valid_ip:
-            print('count={0},num={1},v_time:{2}'.format(count, num, i.Validated_time))
+            # print('count={0},num={1},v_time:{2}'.format(count, num, i.Validated_time))
             if count == num:
                 break
             if not i.ip:
                 continue
             proxy = {}
-            proxy[head] = i.ip + ':' + i.port
-            if v and not verify_ip(proxy):
-                # print('verifing')
-                continue
+
+            proxy[head] = 'http://' + i.ip + ':' + i.port
+            proxy['最后验证时间'] = i.last_modified_time.strftime('%Y-%m-%d %I:%M:%S')
+            proxy['验证次数'] = i.Validated_time
+            proxy['类型'] = i.type
+
             count += 1
             ip_list.append(proxy)
 
