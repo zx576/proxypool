@@ -26,11 +26,11 @@ def fetch_ss():
     '''取得 66 代理网所有分地区的 url，并传入 fetch_ss_1 处理存入数据'''
     url = 'http://www.66ip.cn'
 
-    content = gm.req_url(url=url,headers=headers_66).encode('ISO-8859-1')
+    content = gm.req_url(url=url,headers=headers_66)
     if not content:
         print('error happened when request url:',url)
         return None
-    soup = bs4.BeautifulSoup(content,'lxml')
+    soup = bs4.BeautifulSoup(content.encode('ISO-8859-1'),'lxml')
 
     if not soup:
         return None

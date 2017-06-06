@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^b7cfr77x^fzqkys##id^7uut)j57g^il4qcqu)o1ym=e5iep_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['47.93.61.70','127.0.0.1','lab.crossincode.com']
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

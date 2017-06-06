@@ -1,15 +1,19 @@
+# coding=utf-8
 from .models import Proxy
+from .checkip import CheckIp
 
 import requests
+import re
 
+checkip = CheckIp()
 
 def verify_all():
     ''' verify all proxies in the database
-        
-    if it is valid , this proxy's field 'Validate_time' will add 1,and 
+
+    if it is valid , this proxy's field 'Validate_time' will add 1,and
         field 'failed_time' will be reset to 0.
     or , its 'status' will be 'I' , 'failed_time' is about to add 1
-    
+
     :return: None
     '''
 
@@ -18,9 +22,20 @@ def verify_all():
     invalid_count = 0
     for ip in all_ip:
         proxy = {}
-        proxy[ip.head] = ip.ip + ':' + ip.port
+        is_https = False
+        if ip.head.lower() == 'http,https':
+            proxy['http'] = 'http://' + ip.ip + ':' + ip.port
+            proxy['https'] = 'http://' + ip.ip + ':' + ip.port
 
-        if verify_proxy(proxy):
+        elif ip.head.lower() == 'https':
+            proxy['https'] = 'http://' + ip.ip + ':' + ip.port
+            is_https = True
+
+        else:
+            proxy['http'] = 'http://' + ip.ip + ':' + ip.port
+
+        # 引入检查 IP 类
+        if checkip.check(proxy, ip.type, is_https):
             ip.Validated_time += 1
             ip.status = 'V'
             ip.failed_time = 0
@@ -33,23 +48,7 @@ def verify_all():
 
         ip.save()
 
-    return valid_count,invalid_count
-
-
-def verify_proxy(dic):
-    ''' verify if this IP is valid
-    
-    :param dic: proxy
-    :return: True if it passes verifying or it will return False
-    '''
-    fixed_url = 'http://www.baidu.com/'
-    try:
-        res = requests.get(fixed_url, proxies=dic, timeout=1)
-        assert res.status_code == 200
-        print('{} is ok'.format(dic))
-        return True
-    except:
-        return False
+    return valid_count, invalid_count
 
 
 def verify():
@@ -57,4 +56,5 @@ def verify():
 
     count = verify_all()
 
-    print('verified all {0} proxies,valid proxies occupy {1} and invalid {2}'.format(count[0]+count[1],count[0],count[1]))
+    print('verified all {0} proxies,valid proxies occupy {1} and invalid {2}'.format(count[0] + count[1], count[0],
+                                                                                     count[1]))

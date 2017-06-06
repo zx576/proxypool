@@ -21,7 +21,7 @@
 
 ## 下载使用
 
-`git clone https://github.com/zx576/Crawl_projects.git`
+`git clone https://github.com/zx576/proxypool.git`
 
 进入项目文件夹
 
@@ -131,22 +131,20 @@ http://127.0.0.1:8000/proxy/get/
 
 #### 参数
 
-| name      | type | Description | Must | example | Remarks |
+| name      | type | Description | Optional | example | Remarks |
 | :-------- | --------:| :------: | :------: | :------: | :------: |
-| num    |   int |  IP数量  |   必须 |  10  |每次最多100  |
-| v    |   bool |  是否验证  |   可选 |  true/false  |大小写不敏感,True也是可以的，其他值一律视为 false  |
+| num    |   int |  IP 数量  |   可选 |  10  |每次最多20  | 默认 5 个 |
 | v_num    |   int |  验证通过次数  |   可选 |  5  |原则上通过次数，越多IP越稳定，次数越大IP数量越少 |
-| type    |   str |  ip类型,G-'高匿',T-'透明',O-'其他'  |   可选 |  O  |  |
-| head    |   str |  http 或者 https,默认为 http  |   可选 |  https  |  |
+| type    |   str |  ip类型  |   可选 |  O  |  G-'高匿',T-'透明',O-'其他'|
+| head    |   str |  http 或者 https  |   可选 |  https  |  默认为 http|
 | loc    |   str |  地区  |   可选 |  上海  |尽量以省市一级的地名查询  |
 
-示例: http://127.0.0.1:8000/proxy/get/?num=50&v_num=5&head=https&loc=上海
+示例: http://127.0.0.1:8000/proxy/get/?num=10&v_num=5&head=https&loc=上海
 
-在线地址: http://lab.crossincode.com/proxy/get/?num=50&v_num=5&head=https&loc=上海
+在线地址: http://lab.crossincode.com/proxy/get/?num=10&v_num=5&head=https&loc=上海
 
 
-
-说明: 提取100个ip , 通过验证次数大于等于 5，https 类型，ip坐标上海
+说明: 提取10个ip , 通过验证次数大于等于 5，https 类型，ip坐标上海
 
 ### 查看数据库情况
 
