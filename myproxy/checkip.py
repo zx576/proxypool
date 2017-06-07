@@ -40,7 +40,7 @@ class CheckIp:
     # 检查 ip 是否可用
     def check(self, proxy, type, is_https=False):
 
-        print(proxy, type)
+        # print(proxy, type)
         # 查看是否使用 https 代理
         if is_https:
             urls = self.https_check_urls
@@ -49,17 +49,22 @@ class CheckIp:
             urls = self.http_check_urls
 
 
-        try:
-            for url in urls:
+        suc_count = 0
+        for url in urls:
+            try:
                 req = requests.get(url=url, proxies=proxy, timeout=2)
                 assert req.status_code == 200
+                suc_count += 1
 
+            except Exception as e:
+                continue
 
-        except Exception as e:
-            print(e)
+        if suc_count >= 2:
+            # print(proxy,suc_count)
+            return True
+
+        else:
             return False
-
-        return True
 
 
 

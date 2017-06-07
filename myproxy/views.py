@@ -171,10 +171,10 @@ def verify_ip(dic):
     try:
         res = requests.get(fixed_url, proxies=dic, timeout=1)
         assert res.status_code == 200
-        print('v_code:{},suc'.format(dic))
+        # print('v_code:{},suc'.format(dic))
         return True
     except:
-        print('v_code: {},fail'.format(dic))
+        # print('v_code: {},fail'.format(dic))
         return False
 
 
@@ -262,9 +262,9 @@ def judge_request(request):
 
         addrins.req_count += 1
         diff_timedelta = datetime.now(timezone.utc) - addrins.last_modified_time
-        print(diff_timedelta)
+        # print(diff_timedelta)
         diff = diff_timedelta.seconds
-        print(diff)
+        # print(diff)
 
         if diff < 3:
             addrins.limit_count += 1
