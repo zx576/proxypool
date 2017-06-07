@@ -4,7 +4,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "proxypool.settings")
 django.setup()
 
 
-from myproxy.VerifyProxy import verify
+from myproxy.utils.SortDt import sort
 
 
-verify()
+if __name__ == '__main__':
+    sort()
+

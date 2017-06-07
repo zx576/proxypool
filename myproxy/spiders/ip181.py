@@ -5,7 +5,7 @@ from datetime import datetime
 import bs4
 from .general_methods import GeneralMethods
 
-logger = logging.getLogger(__name__)
+
 gm = GeneralMethods()
 
 

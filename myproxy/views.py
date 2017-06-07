@@ -5,16 +5,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 import json
 from datetime import datetime, timezone, date
-
-# import datetime
 import requests
 
-
 from .models import Proxy, IpAddr
-
-from .VerifyProxy import  verify
-from .SortDt import sort
-from .fetch import crwal
+from .utils.VerifyProxy import  verify
+from .utils.SortDt import sort
+from .utils.fetch import crwal
 
 
 
@@ -60,10 +56,7 @@ def get(request):
         如果大于限定的最大数量，则取最大的数
         如果请求的数量大于数据库中总数量，返回数据库所有 ip， 并在 status 中标明 'not enough'
 
-    v - 是否进行验证，默认不进行验证
-        如果 v=True 则返回验证过后的 ip，为空或其他则不进行验证
-
-    v_num - times passed verifing
+    v_num - times passed verif
 
     type - ip type 'O' stands for 其他 ,'G' for 高匿,'T' for 透明
 
@@ -81,7 +74,6 @@ def get(request):
         data['code'] = 0
         return JsonResponse(data)
 
-
     if request.method == 'GET':
         valid_ip = Proxy.objects.filter(status='V').order_by('-last_modified_time')
         num = request.GET.get('num',None)
@@ -91,12 +83,8 @@ def get(request):
                 if num > MAX_REQUIRED_NUM:
                     num = MAX_REQUIRED_NUM
             except:
-                # error = {'error':'require a integer'}
-                # return JsonResponse(error)
                 num = DEFAULT_NUM
         else:
-            # error = {'error': 'require a parameter num '}
-            # return JsonResponse(error)
             num = DEFAULT_NUM
 
         v_num = request.GET.get('v_num',None)
@@ -111,8 +99,6 @@ def get(request):
 
         type = request.GET.get('type',None)
         if type and type.upper() in ['O','G','T']:
-            # type = type
-            # print(type)
             valid_ip = valid_ip.filter(type__iexact=type)
         else:
             pass
@@ -130,28 +116,24 @@ def get(request):
 
         valid_ip = valid_ip.filter(head__contains=head)
 
-        # v = request.GET.get('v',None)
-        # if v and v.lower() == 'true':
-        #     v = True
-        # else:
-        #     v = None
-
         data = {}
         ip_list = []
         count = 0
 
         for i in valid_ip:
-            # print('count={0},num={1},v_time:{2}'.format(count, num, i.Validated_time))
             if count == num:
                 break
             if not i.ip:
                 continue
             proxy = {}
 
-            proxy[head] = 'http://' + i.ip + ':' + i.port
+            proxy[head] = i.ip + ':' + i.port
             proxy['最后验证时间'] = i.last_modified_time.strftime('%Y-%m-%d %I:%M:%S')
             proxy['验证次数'] = i.Validated_time
-            proxy['类型'] = i.type
+            if i.type == 'T':
+                proxy['类型'] = '透明'
+            else:
+                proxy['类型'] = '高匿'
 
             count += 1
             ip_list.append(proxy)
@@ -160,22 +142,6 @@ def get(request):
         data['code'] = 1
 
         return JsonResponse(data)
-
-def verify_ip(dic):
-    '''
-    :param dic: 字典形式的 IP
-    :return: 如果请求成功则返回 True, 反之 False
-    '''
-    fixed_url = 'http://www.baidu.com/'
-    # print('v_code:', dic)
-    try:
-        res = requests.get(fixed_url, proxies=dic, timeout=1)
-        assert res.status_code == 200
-        # print('v_code:{},suc'.format(dic))
-        return True
-    except:
-        # print('v_code: {},fail'.format(dic))
-        return False
 
 
 # ================查看数据库结果=============================================
@@ -280,7 +246,3 @@ def judge_request(request):
         )
 
     return True
-
-    # content = ['addr: ',addr]
-
-    # return HttpResponse(content)
