@@ -57,10 +57,11 @@ class CheckIp:
                 suc_count += 1
 
             except Exception as e:
+                print(e)
                 continue
 
         if suc_count >= 2:
-            # print(proxy,suc_count)
+            print(proxy,suc_count)
             return True
 
         else:

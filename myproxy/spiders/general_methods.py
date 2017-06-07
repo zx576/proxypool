@@ -4,21 +4,17 @@ import time
 from ..models import Proxy
 from selenium import webdriver
 
-from ..checkip import CheckIp
+from ..utils.checkip import CheckIp
 
 # 初始化
 checkip = CheckIp()
 
 
 class GeneralMethods():
-    def __init__(self):
-        self.ALL_ADDR = []
-        self.extract_addr()
 
-    def extract_addr(self):
-        all_items = Proxy.objects.filter(status='V')
-        for i in all_items:
-            self.ALL_ADDR.append(i.ip)
+    def __init__(self):
+
+        self.all_items = Proxy.objects.all()
 
     def save_proxy(self,resource,ip,port,head, district='其他', http_type='O'):
         '''verifies and saves a IP
@@ -31,85 +27,27 @@ class GeneralMethods():
         :param http_type: which type this IP is, 'O' stands for 其他 ,'G' for 高匿,'T' for 透明
         :return:
         '''
-
-        if ip in self.ALL_ADDR:
+        # 查重
+        try:
+            query = self.all_items.get(ip=ip)
             return
+        except:
+            pass
 
-        if head == 'none' or ',' in head :
-            head = ['http','https']
-            res = []
-
-            for i in head:
-                proxy = {}
-                proxy[i] = 'http://' + ip + ':' + port
-
-                is_https = False
-                if i == 'https':
-                    is_https = True
-
-                if self.verify_ip(proxy, http_type, is_https):
-                    res.append(True)
-                else:
-                    res.append(False)
-
-            if res.count(True) == 2:
-                head = ','.join(head)
-            elif res[0] == True:
-                head = 'http'
-            elif res[1] == True:
-                head = 'https'
-            else:
-                head = None
-
-
-
-
-        else:
-            head = head.lower()
-            proxy = {}
-            proxy[head] = 'http://'+ip + ':' + port
-            if not self.verify_ip(proxy, http_type, head):
-                head = None
-        if head:
-            # 验证可用后存入数据库
-            Proxy.objects.create(
-                # addr=proxy,
-                resourse=resource,
-                ip = ip,
-                port = port,
-                head = head,
-                status='V',
-                district=district,
-                type=http_type
-            )
-
-
-    # 首次验证 ip 是否可用
-    def verify_ip(self, dic, type, is_https):
-        '''
-    
-        :param dic: 字典形式的 IP
-        :return: 如果请求成功则返回 True,反之则 False
-        '''
-        # fixed_url = 'http://www.baidu.com/'
-        # try:
-        #     res = requests.get(fixed_url, proxies=dic, timeout=1)
-        #     assert res.status_code == 200
-        #     return True
-        # except:
-        #     return False
-        if checkip.check(dic, type, is_https):
-            # print('正确ip:',dic)
-            return True
-        else:
-            return False
-
-
-
+        # 不验证直接存储
+        Proxy.objects.create(
+            resourse=resource,
+            ip=ip,
+            port=port,
+            head=head,
+            status='V',
+            district=district,
+            type=http_type
+        )
 
     def get_cookie_by_selenium(self, url):
         '''使用 selenium 获取 cookie
-    
+
         :param url: 获取 cookie 的地址
         :return: 返回字符串形式的
         '''
@@ -162,5 +100,4 @@ class GeneralMethods():
                 return None
 
         else:
-            # soup = bs4.BeautifulSoup(req.text,'lxml')
             return req.text

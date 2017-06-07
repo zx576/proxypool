@@ -1,5 +1,5 @@
 # coding=utf-8
-from .models import Proxy
+from ..models import Proxy
 from .checkip import CheckIp
 
 import requests
@@ -8,7 +8,7 @@ import re
 checkip = CheckIp()
 
 def verify_all():
-    ''' verify all proxies in the database
+    ''' verify all proxies which failed_time less than or equals 5 times in the database
 
     if it is valid , this proxy's field 'Validate_time' will add 1,and
         field 'failed_time' will be reset to 0.
@@ -17,10 +17,14 @@ def verify_all():
     :return: None
     '''
 
-    all_ip = Proxy.objects.all()
+    all_ip = Proxy.objects.filter(failed_time__lte=5).order_by('last_modified_time')
+    count = len(all_ip)
+    per_hour = count // 24 + 1
+
+    choosed_ip = all_ip[:per_hour]
     valid_count = 0
     invalid_count = 0
-    for ip in all_ip:
+    for ip in choosed_ip:
         proxy = {}
         is_https = False
         if ip.head.lower() == 'http,https':
