@@ -16,7 +16,7 @@ from .utils.fetch import crwal
 
 # ===========首页==========================================================
 def index(request):
-    items = Proxy.objects.filter(status='V').order_by('-created_time')[:50]
+    items = Proxy.objects.filter(status='V').filter(Validated_time__gte=5).order_by('-last_modified_time')[:50]
 
     contents = {
         'items':items,
@@ -75,7 +75,7 @@ def get(request):
         return JsonResponse(data)
 
     if request.method == 'GET':
-        valid_ip = Proxy.objects.filter(status='V').order_by('-last_modified_time')
+        valid_ip = Proxy.objects.filter(status='V').filter(Validated_time__gte=5).order_by('-last_modified_time')
         num = request.GET.get('num',None)
         if num :
             try:

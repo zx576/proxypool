@@ -17,8 +17,6 @@ def deduplicate():
 
 def sort():
     print('deduplicaing proxies')
-
     deduplicate_count = deduplicate()
-
     print('deduplicated {0} items'.format(deduplicate_count))
 
