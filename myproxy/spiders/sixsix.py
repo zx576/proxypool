@@ -86,7 +86,7 @@ def fetch_ss_1(url):
                 continue
             SS_IP.append(ip)
 
-            gm.save_proxy('66代理',ip,port,'none',district=district,http_type=type)
+            gm.save_proxy('66代理', ip, port, 'http,https', district=district,http_type=type)
     except Exception as e:
         print('fetch_ss_1 请求 %s 报错，错误信息：%s' % (url, e))
         return None
