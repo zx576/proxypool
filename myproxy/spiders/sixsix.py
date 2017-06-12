@@ -57,7 +57,11 @@ def fetch_ss_1(url):
     global SS_IP
     content = gm.req_url(url, headers_66)
     if not content:
-        content = gm.get_source_by_selenium(url)
+        try:
+            content = gm.get_source_by_selenium(url)
+        except Exception as e:
+            print(e)
+            return None
 
     content = content.encode('ISO-8859-1')
 
