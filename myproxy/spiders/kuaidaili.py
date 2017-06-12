@@ -74,7 +74,11 @@ def fetch_k1():
 
         content = req_url_kuai(url, headers_kuai)
         if not content:
-            content = gm.get_source_by_selenium(url)
+            try:
+                content = gm.get_source_by_selenium(url)
+            except Exception as e:
+                print(e)
+                return None
         try:
             soup = bs4.BeautifulSoup(content,'lxml')
             soup_tb = soup.find('tbody')
