@@ -3,7 +3,7 @@
 基于 django 制作的 IP 池，本项目使用 requests+bs4 爬取数据，依托 django 数据库系统保存，通过网络请求从数据库内获取 IP，运行中有疑问可以在 Issues 下
 提交。
 
-该 IP 池已经在线部署到以下地址：lab.crossincode.com/proxy
+该 IP 池已经部署到：lab.crossincode.com/proxy
 
 ## 运行环境
 
@@ -35,15 +35,14 @@
 
 `$ python manage.py runserver`
 
-访问首页
-http://127.0.0.1:8000/proxy/
+访问首页: http://127.0.0.1:8000/proxy/
 
 ### 运行爬虫任务
 #### 1、windows 下计划任务
 
-将 sche_spider.py 加入计划任务
+将 run_spider.py 加入计划任务
 
-参考:http://mp.weixin.qq.com/s/JKFvnmtlEqaE8GxbX6Fpyw
+参考: http://mp.weixin.qq.com/s/JKFvnmtlEqaE8GxbX6Fpyw
 
 #### 2、linux-cron
 
@@ -57,7 +56,6 @@ http://127.0.0.1:8000/proxy/
 
 表示每 4 个小时运行一遍爬取任务
 
-
 #### 2、手动运行
 
 进入项目文件夹
@@ -65,7 +63,7 @@ http://127.0.0.1:8000/proxy/
 `$ python manage.py runserver`
 
 进入 http://127.0.0.1:8000/proxy/work/
-手动点击 crwal 按钮运行
+手动点击 Start 按钮运行
 
 
 ## 项目说明
@@ -79,6 +77,7 @@ http://127.0.0.1:8000/proxy/
 #### 文件说明
 
 爬虫文件在 spider 文件夹下
+
 验证、去重整理等文件在 utils 文件夹下
 
 #### 目前爬取的网站
@@ -87,11 +86,6 @@ http://127.0.0.1:8000/proxy/
 - 快代理
 - 66 代理
 - 西刺代理
-
-#### 扩展网站
-
-- 爬虫脚本编写参考爬虫文件
-- 脚本编写好之后，在 utils 文件夹下 fetch.py 中导入该文件主函数，加入线程池即可
 
 ### 验证 IP
 
@@ -113,13 +107,15 @@ http://127.0.0.1:8000/proxy/
 
 清除重复的 IP
 
+删除连续验证失败超过 5 次的 IP
+
 ### API 提取 IP 接口
 
 #### API 提取 url
 
 - 默认返回 5 个，最多 20；
 - 请求频率为 3 秒一次，频繁请求不会返回内容；
-- 为提高可用率，API 接口提取的 IP 验证次数都大于 5
+- 为提高可用率，API 接口提取的 IP 验证次数大于 5
 
 运行项目
 
@@ -136,7 +132,7 @@ http://127.0.0.1:8000/proxy/get/
 | name      | type | Description | Optional | example | Remarks |
 | :-------- | --------:| :------: | :------: | :------: | :------: |
 | num    |   int |  IP 数量  |   可选 |  10  |每次最多20  | 默认 5 个 |
-| v_num    |   int |  验证通过次数  |   可选 |  5  |原则上通过次数，越多IP越稳定，次数越大IP数量越少 |
+| v_num    |   int |  验证通过次数  |   可选 |  5  |通过次数越多，IP越稳定|
 | type    |   str |  ip类型  |   可选 |  O  |  G-'高匿',T-'透明',O-'其他'|
 | head    |   str |  http 或者 https  |   可选 |  https  |  默认为 http|
 | loc    |   str |  地区  |   可选 |  上海  |尽量以省市一级的地名查询  |

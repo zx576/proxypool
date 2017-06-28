@@ -18,7 +18,7 @@ class GeneralMethods():
 
     def save_proxy(self,resource,ip,port,head, district='其他', http_type='O'):
         '''verifies and saves a IP
-    
+
         :param resource: which website this IP comes from
         :param ip:  IP in string
         :param port : IP port
@@ -76,10 +76,10 @@ class GeneralMethods():
 
     def req_url(self,url, headers, rep_count=1):
         ''' 请求网页，返回 bs 处理过的字符串
-    
+
         请求过程如果对方拒绝或者状态码不为 200 ，调用 selenium 重新获取 cookie,然后再次请求
         再失败，就直接返回 None
-    
+
         :param url: 请求地址
         :param headers: 请求头
         :param rep_count: 请求次数，默认为 1，
